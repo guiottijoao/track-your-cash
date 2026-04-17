@@ -142,3 +142,10 @@ dist
 .svelte-kit
 
 # End of https://www.toptal.com/developers/gitignore/api/node
+/generated/prisma
+
+# SQLite
+*.db
+*.db-journal
+*.db-wal
+*.db-shm

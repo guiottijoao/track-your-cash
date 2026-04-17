@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int          @id @default(autoincrement())
+  name        String
+  email       String       @unique
+  password    String
+  created_at  DateTime     @default(now())
+  accounts    Account[]
+  pluggyItems PluggyItem[]
+
+  @@map("user")
+}
+
+model PluggyItem {
+  id             Int              @id @default(autoincrement())
+  user           User             @relation(fields: [userId], references: [id])
+  userId         Int
+  pluggy_item_id Int
+  status         String
+  created_at     DateTime         @default(now())
+  accounts       Account[]
+
+  @@map("pluggy_item")
+}
+
+model Account {
+  id               Int          @id @default(autoincrement())
+  user             User         @relation(fields: [userId], references: [id])
+  userId           Int
+  pluggyItem       PluggyItem   @relation(fields: [itemId], references: [id])
+  itemId           Int
+  pluggy_account_id Int
+  name             String
+  display_name     String
+  type             String
+  balance          Float
+  transactions     Transaction[]
+
+  @@map("account")
+}
+
+model Transaction {
+  id                    Int      @id @default(autoincrement())
+  account               Account  @relation(fields: [accountId], references: [id])
+  accountId             Int
+  pluggy_transaction_id Int
+  description           String
+  amount                Float
+  type                  String
+  pluggy_category       String?
+  category              String
+  date                  DateTime
+
+  @@map("transaction")
+}
