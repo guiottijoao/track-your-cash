@@ -1,13 +1,11 @@
-import express from 'express'
-import { errorHandler } from './middleware/error-handler'
-import userRoutes from './routes/users'
+import express from "express";
+import { errorHandler } from "./middleware/error-handler";
+import routes from "./routes/index";
 
-const app = express()
+const app = express();
 
-app.use(express.json())
+app.use(express.json());
+app.use("/api", routes);
+app.use(errorHandler);
 
-app.use('/api/users', userRoutes)
-
-app.use(errorHandler)
-
-export default app
+export default app;
