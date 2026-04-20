@@ -1,12 +1,20 @@
 import prisma from "../../lib/prisma";
 import { User, Prisma } from "../../../generated/prisma";
+import bcrypt from "bcrypt";
 
-export const getAll = async (): Promise<User[]> => {
-  return prisma.user.findMany();
+type SafeUser = Omit<User, "password">;
+
+export const getAll = async (): Promise<SafeUser[]> => {
+  return prisma.user.findMany({
+    select: { id: true, name: true, email: true, created_at: true },
+  });
 };
 
-export const findById = async (id: number): Promise<User> => {
-  const user = await prisma.user.findUnique({ where: { id } });
+export const findById = async (id: number): Promise<SafeUser> => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: { id: true, name: true, email: true, created_at: true },
+  });
   if (!user) {
     const err: any = new Error("User not found");
     err.status = 404;
@@ -15,10 +23,16 @@ export const findById = async (id: number): Promise<User> => {
   return user;
 };
 
-export const create = async (data: Prisma.UserCreateInput): Promise<User> => {
+export const create = async (
+  data: Prisma.UserCreateInput,
+): Promise<SafeUser> => {
   // UserCreateInput is a type created by Prisma (no need to create one manually)
   try {
-    return prisma.user.create({ data });
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    return await prisma.user.create({
+      data: { ...data, password: hashedPassword },
+      select: { id: true, name: true, email: true, created_at: true },
+    });
   } catch (err) {
     if (
       err instanceof Prisma.PrismaClientKnownRequestError &&
@@ -33,11 +47,12 @@ export const create = async (data: Prisma.UserCreateInput): Promise<User> => {
 export const update = async (
   id: number,
   data: Prisma.UserUpdateInput,
-): Promise<User> => {
+): Promise<SafeUser> => {
   try {
-    return prisma.user.update({
+    return await prisma.user.update({
       where: { id },
       data,
+      select: { id: true, name: true, email: true, created_at: true },
     });
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
