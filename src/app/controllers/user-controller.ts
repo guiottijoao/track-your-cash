@@ -40,7 +40,7 @@ export const create = async (
     if (!parsed.success) {
       return res.status(400).json({ errors: z.flattenError(parsed.error) });
     }
-    const user = await userService.create(req.body);
+    const user = await userService.create(parsed.data);
     res.status(201).json(user);
   } catch (err) {
     next(err);
