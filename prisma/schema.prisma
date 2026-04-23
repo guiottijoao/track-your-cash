@@ -23,22 +23,23 @@ model Account {
   id                     Int           @id @default(autoincrement())
   user                   User          @relation(fields: [userId], references: [id])
   userId                 Int           @map("user_id")
+  external_id            String        @unique
   name                   String
   type                   String
   subtype                String
   number                 String
   currency_code          String
   balance                Float
-  owner                  String
+  owner                  String?
   connector_name         String
   connector_image_url    String
   credit_limit           Float?
   available_credit_limit Float?
-  balance_due_data       DateTime?
+  balance_due_date       DateTime?
   minimum_payment        Float?
-  synced_at              DateTime
-  created_at             DateTime
-  updated_at             DateTime
+  synced_at              DateTime      @default(now())
+  created_at             DateTime      @default(now())
+  updated_at             DateTime      @updatedAt
   transactions           Transaction[]
 
   @@map("account")
@@ -48,16 +49,20 @@ model Transaction {
   id                 Int      @id @default(autoincrement())
   account            Account  @relation(fields: [accountId], references: [id])
   accountId          Int      @map("account_id")
+  external_id        String   @unique
   description        String
   amount             Float
+  currency_code      String
   date               DateTime
   type               String
   status             String
-  original_category  String
+  original_category  String?
   category           String
   installment_number Int?
   installment_total  Int?
-  created_at         DateTime
+  created_at         DateTime @default(now())
 
+  @@index([accountId])
+  @@index([date])
   @@map("transaction")
 }
