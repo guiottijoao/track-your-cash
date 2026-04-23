@@ -16,9 +16,7 @@ export const findById = async (id: number): Promise<SafeUser> => {
     select: { id: true, name: true, email: true, created_at: true },
   });
   if (!user) {
-    const err: any = new Error("User not found");
-    err.status = 404;
-    throw err;
+    throw Object.assign(new Error("User not found"), { status: 404 })
   }
   return user;
 };
