@@ -1,8 +1,48 @@
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import prisma from "../../lib/prisma";
 import { User, Prisma } from "../../../generated/prisma";
-import bcrypt from "bcrypt";
 
 type SafeUser = Omit<User, "password">;
+
+export const register = async (
+  name: string,
+  email: string,
+  password: string,
+) => {
+  const existing = await prisma.user.findUnique({ where: { email } });
+
+  if (existing)
+    throw Object.assign(new Error("User already exists"), { status: 409 });
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const user = await prisma.user.create({
+    data: { name, email, password: hashedPassword },
+  });
+
+  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, {
+    expiresIn: "7d",
+  });
+
+  return token;
+};
+
+export const login = async (email: string, password: string) => {
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user)
+    throw Object.assign(new Error("Invalid credentials"), { status: 401 });
+
+  const passwordMatch = await bcrypt.compare(password, user.password);
+  if (!passwordMatch)
+    throw Object.assign(new Error("Invalid credentials"), { status: 401 });
+
+  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, {
+    expiresIn: "7d",
+  });
+
+  return token;
+};
 
 export const getAll = async (): Promise<SafeUser[]> => {
   return prisma.user.findMany({
@@ -16,7 +56,7 @@ export const findById = async (id: number): Promise<SafeUser> => {
     select: { id: true, name: true, email: true, created_at: true },
   });
   if (!user) {
-    throw Object.assign(new Error("User not found"), { status: 404 })
+    throw Object.assign(new Error("User not found"), { status: 404 });
   }
   return user;
 };

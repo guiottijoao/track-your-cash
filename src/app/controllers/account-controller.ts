@@ -42,7 +42,7 @@ export const create = async (
     }
     const account = await accountService.create({
       ...parsed.data,
-      user: { connect: { id: req.user.id } }, // will be fixed when auth middleware is created
+      user: { connect: { id: req.user!.id } },
     });
     res.status(201).json(account);
   } catch (err) {
