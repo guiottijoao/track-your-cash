@@ -31,7 +31,7 @@ export const create = async (
           status: 409,
         });
       }
-      if (err.code === "P2003") {
+      if (err.code === "P2003" || err.code === "P2025") {
         throw Object.assign(new Error("Account not found"), { status: 404 });
       }
     }
