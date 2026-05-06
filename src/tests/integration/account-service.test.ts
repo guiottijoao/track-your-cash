@@ -24,6 +24,7 @@ const testAccount = {
 let token: string;
 
 beforeEach(async () => {
+  await prisma.transaction.deleteMany();
   await prisma.account.deleteMany();
   await prisma.user.deleteMany();
   await request(app).post("/api/auth/register").send(testUser);

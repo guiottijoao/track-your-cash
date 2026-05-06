@@ -4,6 +4,8 @@ import app from "../../app/index";
 import prisma from "../../lib/prisma";
 
 beforeEach(async () => {
+  await prisma.transaction.deleteMany();
+  await prisma.account.deleteMany();
   await prisma.user.deleteMany();
 });
 

@@ -6,6 +6,7 @@ export default defineConfig({
       NODE_ENV: 'test'
     },
     envFiles: ['.env.test'],
-    globalSetup: './src/tests/setup.ts'
+    globalSetup: './src/tests/setup.ts',
+    fileParallelism: false,
   }
 })
