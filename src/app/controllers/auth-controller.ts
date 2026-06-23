@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as userService from "../services/users";
-import { createUserSchema } from "../schemas/user";
+import { createUserSchema } from "../schemas/user.schema";
 import { z } from "zod";
 
 const loginSchema = z.object({

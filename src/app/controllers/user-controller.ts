@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as userService from "../services/users";
-import { createUserSchema, updateUserSchema } from "../schemas/user";
+import { createUserSchema, updateUserSchema } from "../schemas/user.schema";
 import * as z from "zod";
 
 export const getAll = async (

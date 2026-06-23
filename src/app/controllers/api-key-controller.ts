@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import * as apiKeyService from "../services/api-key";
-import { pierreApiKeySchema } from "../schemas/api-key";
-import { idSchema } from "../schemas/generic/id-schema";
+import { pierreApiKeySchema } from "../schemas/api-key.schema";
+import { idSchema } from "../schemas/generic/id.schema";
 import * as z from "zod";
 
 export const create = async (

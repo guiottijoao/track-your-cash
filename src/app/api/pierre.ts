@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { pierreGetAccountResponseSchema } from "../schemas/pierre-accounts";
-import { pierreGetTransactionsResponseSchema } from "../schemas/pierre-transactions";
+import { pierreGetAccountResponseSchema } from "../schemas/pierre-accounts.schema";
+import { pierreGetTransactionsResponseSchema } from "../schemas/pierre-transactions.schema";
 
 type pierreGetTransactionsResponse = z.infer<
   typeof pierreGetTransactionsResponseSchema

@@ -3,7 +3,7 @@ import * as transactionService from "../services/transactions";
 import {
   createTransactionSchema,
   updateTransactionSchema,
-} from "../schemas/transaction";
+} from "../schemas/transaction.schema";
 import * as z from "zod";
 
 export const getAll = async (
