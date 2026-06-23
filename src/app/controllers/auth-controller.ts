@@ -1,12 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import * as userService from "../services/users";
-import { createUserSchema } from "../schemas/user.schema";
+import { loginSchema, registerSchema } from "../schemas/auth.schema";
 import { z } from "zod";
-
-const loginSchema = z.object({
-  email: z.email(),
-  password: z.string().min(6),
-});
 
 export const register = async (
   req: Request,
@@ -14,7 +9,7 @@ export const register = async (
   next: NextFunction,
 ) => {
   try {
-    const parsed = createUserSchema.safeParse(req.body);
+    const parsed = registerSchema.safeParse(req.body);
     if (!parsed.success) {
       return res.status(400).json({ errors: z.flattenError(parsed.error) });
     }

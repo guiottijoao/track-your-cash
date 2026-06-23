@@ -3,7 +3,8 @@ import jwt from "jsonwebtoken";
 import prisma from "../../lib/prisma";
 import { User, Prisma } from "../../../generated/prisma";
 
-type SafeUser = Omit<User, "password">;
+// Creates type using base of User type, but removes password
+type SafeUser = Omit<User, "password" | "pierre_api_key">;
 
 export const register = async (
   name: string,
