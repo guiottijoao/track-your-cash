@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import * as accountService from "../services/accounts";
-import { createAccountSchema, updateAccountSchema } from "../schemas/accounts.schema";
+import {
+  createAccountSchema,
+  updateAccountSchema,
+} from "../schemas/accounts.schema";
+import { idSchema } from "../schemas/generic/id.schema";
 import * as z from "zod";
 
 export const getAll = async (
@@ -71,13 +75,26 @@ export const update = async (
 export const remove = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
-    const id = Number(req.params.id)
-    await accountService.remove(id)
-    res.status(204).json()
+    const id = Number(req.params.id);
+    await accountService.remove(id);
+    res.status(204).json();
   } catch (err) {
-    next(err)
+    next(err);
   }
-}
+};
+
+export const sync = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const parsed = idSchema.safeParse({ id: req.params.userId });
+    if (!parsed.success) {
+      return res.status(400).json({ errors: z.flattenError(parsed.error) });
+    }
+    const accounts = await accountService.syncAccounts(parsed.data.id);
+    return res.status(200).json(accounts);
+  } catch (err) {
+    next(err);
+  }
+};

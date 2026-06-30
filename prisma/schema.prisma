@@ -9,13 +9,13 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  name       String
-  email      String    @unique
-  password   String
+  id             Int       @id @default(autoincrement())
+  name           String
+  email          String    @unique
+  password       String
   pierre_api_key String?
-  created_at DateTime  @default(now())
-  accounts   Account[]
+  created_at     DateTime  @default(now())
+  accounts       Account[]
 
   @@map("user")
 }
@@ -30,13 +30,14 @@ model Account {
   subtype                String
   number                 String
   currency_code          String
-  balance                Float
+  balance                String
   owner                  String?
-  connector_name         String
-  connector_image_url    String
+  connector_name         String?
+  connector_image_url    String?
   credit_limit           Float?
   available_credit_limit Float?
-  balance_due_date       DateTime?
+  balance_due_date       String?
+  // balance_due_date       DateTime?     @db.Date Use this line when using postgresql (doesnt work in sqlite)
   minimum_payment        Float?
   synced_at              DateTime      @default(now())
   created_at             DateTime      @default(now())

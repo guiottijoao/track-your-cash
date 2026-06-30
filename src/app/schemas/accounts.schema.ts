@@ -10,7 +10,7 @@ export const createAccountSchema = z.object({
     .openapi({ example: "CHECKING_ACCOUNT" }),
   number: z.string().openapi({ example: "0001" }),
   currency_code: z.string().length(3).openapi({ example: "USD" }),
-  balance: z.number().openapi({ example: 1500.75 }),
+  balance: z.string().openapi({ example: 1500.75 }),
   owner: z.string().optional().openapi({ example: "John Doe" }),
   connector_name: z.string().openapi({ example: "My Bank" }),
   connector_image_url: z
@@ -19,9 +19,8 @@ export const createAccountSchema = z.object({
     .openapi({ example: "https://example.com/bank.png" }),
   credit_limit: z.number().optional().openapi({ example: 5000 }),
   available_credit_limit: z.number().optional().openapi({ example: 3500 }),
-  balance_due_date: z.iso
-    .datetime()
-    .optional()
+  balance_due_date: z
+    .string()
     .openapi({ example: "2026-06-23T00:00:00.000Z" }),
   minimum_payment: z.number().optional().openapi({ example: 250 }),
 });
@@ -29,22 +28,22 @@ export const createAccountSchema = z.object({
 export const updateAccountSchema = createAccountSchema.partial();
 
 registry.registerPath({
-  method: 'post',
-  path: '/accounts',
+  method: "post",
+  path: "/accounts",
   summary: "Create account",
   request: {
     body: {
       content: {
         "application/json": {
-          schema: createAccountSchema
+          schema: createAccountSchema,
         },
-      }
-    }
+      },
+    },
   },
   responses: {
     201: { description: "Account created successfully" },
     400: { description: "Invalid data" },
     404: { description: "User not found" },
-    409: { description: "Account already exists" }
-  }
-})
+    409: { description: "Account already exists" },
+  },
+});

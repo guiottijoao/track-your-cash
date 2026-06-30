@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const pierreBankDataSchema = z.object({
   closingBalance: z.number(),
-  transferNumber: z.number(),
+  transferNumber: z.string(),
   overdraftUsedLimit: z.number(),
   overdraftContractedLimit: z.number(),
   unarrangedOverdraftAmount: z.number(),
@@ -34,12 +34,12 @@ const pierreCreditDataSchema = z.object({
   creditLimit: z.number(),
   balanceDueDate: z.string(),
   minimumPayment: z.number(),
-  additionalCards: pierreAdditionalCardsSchema.nullable(),
+  additionalCards: z.array(pierreAdditionalCardsSchema).nullable().optional(),
   isLimitFlexible: z.boolean(),
   balanceCloseDate: z.string().nullable(),
   availableCreditLimit: z.number(),
   balanceForeignCurrency: z.string().nullable(),
-  disaggregatedCreditLimits: pierreDisaggregatedCreditLimitsSchema,
+  disaggregatedCreditLimits: z.array(pierreDisaggregatedCreditLimitsSchema).optional(),
 });
 
 const pierreAccountSchema = z.object({
@@ -49,7 +49,7 @@ const pierreAccountSchema = z.object({
   type: z.enum(["BANK", "CREDIT", "INVESTMENT", "LOAN"]),
   subtype: z.enum([
     "CHECKING_ACCOUNT",
-    "SAVINGS_ACCOUNT",
+    "SAVINGS",
     "CREDIT_CARD",
     "PAYMENT_ACCOUNT",
   ]),
@@ -65,9 +65,9 @@ const pierreAccountSchema = z.object({
   userId: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),
-  connectorName: z.string(),
-  connectorImageUrl: z.string(),
-  itemLastUpdatedAt: z.string(),
+  connectorName: z.string().nullable(),
+  connectorImageUrl: z.string().nullable(),
+  itemLastUpdatedAt: z.string().nullable(),
 });
 
 export const pierreGetAccountResponseSchema = z.object({
