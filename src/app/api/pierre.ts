@@ -1,20 +1,33 @@
-import { z } from "zod";
-import { pierreGetAccountResponseSchema } from "../schemas/pierre-accounts.schema";
-import { pierreGetTransactionsResponseSchema } from "../schemas/pierre-transactions.schema";
-
-type pierreGetTransactionsResponse = z.infer<
-  typeof pierreGetTransactionsResponseSchema
->;
-
-export async function getTransactions(): Promise<pierreGetTransactionsResponse> {
+export async function getTransactions(apiKey: string): Promise<any> {
   const response = await fetch(
     "https://www.pierre.finance/tools/api/get-transactions",
     {
       headers: {
-        Authorization: `Bearer ${process.env.PIERRE_API_KEY}`,
+        Authorization: `Bearer ${apiKey}`,
       },
     },
   );
-  const json = response.json();
-  return pierreGetTransactionsResponseSchema.parse(json);
+  if (!response.ok) {
+    throw Object.assign(new Error("Pierre API error."), {
+      status: response.status,
+    });
+  }
+  return await response.json();
+}
+
+export async function getAccounts(apiKey: string): Promise<any> {
+  const response = await fetch(
+    "https://www.pierre.finance/tools/api/get-accounts",
+    {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    },
+  );
+  if (!response.ok) {
+    throw Object.assign(new Error("Pierre API error."), {
+      status: response.status,
+    });
+  }
+  return await response.json();
 }
