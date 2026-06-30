@@ -11,5 +11,6 @@ router.get("/:id", accountController.getById);
 router.post("/", accountController.create);
 router.put("/:id", accountController.update);
 router.delete("/:id", accountController.remove);
+router.post("/sync/:userId", accountController.sync);
 
 export default router;
