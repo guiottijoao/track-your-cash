@@ -4,8 +4,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -37,7 +38,6 @@ model Account {
   credit_limit           Float?
   available_credit_limit Float?
   balance_due_date       String?
-  // balance_due_date       DateTime?     @db.Date Use this line when using postgresql (doesnt work in sqlite)
   minimum_payment        Float?
   synced_at              DateTime      @default(now())
   created_at             DateTime      @default(now())

@@ -21,7 +21,8 @@ export const createAccountSchema = z.object({
   available_credit_limit: z.number().optional().openapi({ example: 3500 }),
   balance_due_date: z
     .string()
-    .openapi({ example: "2026-06-23T00:00:00.000Z" }),
+    .optional()
+    .openapi({ example: "2026-06-23" }),
   minimum_payment: z.number().optional().openapi({ example: 250 }),
 });
 
