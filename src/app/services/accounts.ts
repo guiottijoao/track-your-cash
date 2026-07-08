@@ -117,7 +117,6 @@ export const syncAccounts = async (userId: number): Promise<void> => {
     }
 
     for (const acc of parsedResponse.data) {
-      console.log(acc.creditData?.balanceDueDate)
       await prisma.account.upsert({
         where: {
           external_id: acc.id,
