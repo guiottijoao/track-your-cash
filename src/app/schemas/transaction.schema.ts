@@ -13,8 +13,21 @@ export const createTransactionSchema = z.object({
   status: z.string().min(1).openapi({ example: "POSTED" }),
   original_category: z.string().optional().openapi({ example: "Groceries" }),
   category: z.string().min(1).openapi({ example: "Food" }),
-  installment_number: z.number().int().positive().optional().openapi({ example: 1 }),
-  installment_total: z.number().int().positive().optional().openapi({ example: 12 }),
+  installment_number: z
+    .number()
+    .int()
+    .positive()
+    .optional()
+    .openapi({ example: 1 }),
+  installment_total: z
+    .number()
+    .int()
+    .positive()
+    .optional()
+    .openapi({ example: 12 }),
+  installment_due_date: z.iso
+    .datetime()
+    .openapi({ example: "2026-06-23T10:35:00.000Z" }),
 });
 
 export const updateTransactionSchema = createTransactionSchema.partial();
@@ -33,6 +46,9 @@ const transactionResponseSchema = z.object({
   category: z.string().openapi({ example: "Food" }),
   installment_number: z.number().int().nullable().openapi({ example: null }),
   installment_total: z.number().int().nullable().openapi({ example: null }),
+  installment_due_date: z.iso
+    .datetime()
+    .openapi({ example: "2026-06-23T10:35:00.000Z" }),
   created_at: z.iso.datetime().openapi({ example: "2026-06-23T10:35:00.000Z" }),
 });
 
