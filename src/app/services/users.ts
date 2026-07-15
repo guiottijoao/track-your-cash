@@ -42,7 +42,10 @@ export const login = async (email: string, password: string) => {
     expiresIn: "7d",
   });
 
-  return token;
+  return {
+    token,
+    user: { id: user?.id, name: user?.name, email: user?.email },
+  };
 };
 
 export const getAll = async (): Promise<SafeUser[]> => {
@@ -119,3 +122,11 @@ export const remove = async (id: number): Promise<void> => {
     throw err;
   }
 };
+
+export async function me(userId: number) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { id: true, name: true, email: true },
+  });
+  return user;
+}

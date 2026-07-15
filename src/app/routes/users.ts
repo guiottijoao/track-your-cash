@@ -8,6 +8,7 @@ const router = Router();
 router.use(authenticate);
 
 router.get("/", userController.getAll);
+router.get("/me", userController.me);
 router.get("/:id", userController.getById);
 router.post("/", userController.create);
 router.put("/:id", userController.update);
