@@ -11,8 +11,8 @@ const paymentDataRecieverSchema = z.object({
 });
 
 const pierreTransactionPaymentDataSchema = z.object({
-  payer: paymentDataPayerSchema,
-  reciever: paymentDataRecieverSchema,
+  payer: paymentDataPayerSchema.nullish(),
+  reciever: paymentDataRecieverSchema.nullish(),
 });
 
 const pierreTransactionMerchantSchema = z.object({
@@ -24,11 +24,11 @@ const pierreAccountCreditDataSchema = z.object({
   brand: z.string(),
   level: z.string(),
   status: z.string(),
-  creditLimit: z.string(),
+  creditLimit: z.number(),
   balanceDueDate: z.string(),
-  minimumPayment: z.string(),
+  minimumPayment: z.number(),
   balanceCloseDate: z.string().nullable(),
-  availableCreditLimit: z.string(),
+  availableCreditLimit: z.number(),
 });
 
 const pierreTransactionSchema = z.object({
@@ -39,16 +39,14 @@ const pierreTransactionSchema = z.object({
   original_category: z.string().nullable(),
   tr_confidence: z.string().nullable(),
   tr_reasoning: z.string().nullable(),
-  tr_source: z.string().nullable(),
   currency_code: z.string(),
   amount: z.number(),
   amount_in_account_currency: z.number().nullable(),
   date: z.string(),
   installment_due_date: z.string(),
-  balance: z.number().nullable(),
   type: z.enum(["DEBIT", "CREDIT"]),
   status: z.enum(["POSTED", "PENDING"]),
-  payment_data: pierreTransactionPaymentDataSchema,
+  payment_data: pierreTransactionPaymentDataSchema.nullable(),
   credit_card_data: z.unknown(),
   merchant: pierreTransactionMerchantSchema.nullable(),
   account_item_id: z.string(),
@@ -62,7 +60,7 @@ const pierreTransactionSchema = z.object({
     "CREDIT_CARD",
     "PAYMENT_ACCOUNT",
   ]),
-  account_credit_data: pierreAccountCreditDataSchema.nullable(),
+  account_credit_data: pierreAccountCreditDataSchema.nullish(),
   item_bank_name: z.string(),
   manual_transaction: z.boolean(),
 });

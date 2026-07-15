@@ -62,6 +62,7 @@ model Transaction {
   category           String
   installment_number Int?
   installment_total  Int?
+  installment_due_date DateTime
   created_at         DateTime @default(now())
 
   @@index([accountId])

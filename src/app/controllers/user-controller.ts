@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import * as userService from "../services/users";
 import { createUserSchema, updateUserSchema } from "../schemas/user.schema";
 import * as z from "zod";
+import { idSchema } from "../schemas/generic/id.schema";
 
 export const getAll = async (
   req: Request,
@@ -77,4 +78,12 @@ export const remove = async (
   } catch (err) {
     next(err);
   }
+};
+
+export const me = async (req: Request, res: Response) => {
+  const user = await userService.me(req.user!.id);
+  if (!user) {
+    return res.status(404).json({ message: "User not found." });
+  }
+  return res.status(200).json(user);
 };
